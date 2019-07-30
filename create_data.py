@@ -1,8 +1,9 @@
 import csv
 from fuzzywuzzy import fuzz
+import random
 
 input_file = 'inputs/acquirer_test_list.tsv'
-output_file = 'files/data_frame.csv'
+output_file = 'files/data_frame_shortened.csv'
 
 #keep track of all the aliases and subsidiaries for a given company
 other_names = {}
@@ -70,7 +71,9 @@ with open(output_file, 'a', newline="\n", encoding='utf-8-sig') as out_file:
         
         for other_acquirer in other_acquirers:
             for assignee_of_other_acquirer in other_names[other_acquirer]:
-                #print(acquirer + ', ' + assignee_of_other_acquirer)
+                #use this line of code to help reduce the number of non-match data points
+                if random.random() < .998:
+                    continue
                 #singular variables
                 simple_ratio = float(fuzz.ratio(acquirer, assignee_of_other_acquirer)) / 100
                 partial_ratio = float(fuzz.partial_ratio(acquirer, assignee_of_other_acquirer)) / 100
