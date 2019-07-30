@@ -1,6 +1,9 @@
 import numpy as np
 from pandas import DataFrame
 import csv
+import matplotlib.pyplot as plt
+from sklearn import linear_model
+import math
 
 data = 'files/data_frame.csv'
 
@@ -69,3 +72,24 @@ print()
 print(df.info())
 print()
 print(df.corr(method = 'pearson'))
+
+'''
+plt.scatter(df['is_match'], df['partial*set'], color='red')
+plt.show()
+'''
+
+X = df[['simple_ratio', 'partial_ratio', 'sort_ratio', 'set_ratio', 'simple*partial',
+        'simple*sort', 'simple*set', 'partial*sort', 'partial*set', 'sort*set', 'simple^2', 'partial^2', 'sort^2', 'set^2']] 
+Y = df['is_match']
+
+X_sample = [[1.0, 1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0]]
+ 
+# with sklearn
+regr = linear_model.LinearRegression()
+regr.fit(X, Y)
+
+print('Intercept: \n', regr.intercept_)
+print('Coefficients: \n', regr.coef_)
+print('R^2: \n', regr.score(X, Y))
+print('R: \n', math.sqrt(regr.score(X, Y)))
+print(regr.predict(X_sample))
