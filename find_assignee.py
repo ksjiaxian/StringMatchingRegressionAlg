@@ -1,7 +1,7 @@
 import csv
 from fuzzywuzzy import fuzz
-import math
-from fastnumbers import fast_real
+#import math
+#from fastnumbers import fast_real
 import create_model
 
 data = 'files/data_frame_shortened.csv'
