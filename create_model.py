@@ -124,7 +124,7 @@ class Model:
             
             return self.model.predict_proba(sample)[:,1]
         
-    def is_match(self, string1, string2, threshold):
+    def is_match(self, string1, string2, threshold = .806375):
         confidence = self.make_prediction(string1, string2)
         return confidence > threshold
         
