@@ -62,6 +62,8 @@ def check_input_file():
     return test_dict
 
 if __name__ == '__main__':
+    print('Percentages of Error -')
+    
     orbis_dict = check_orbis()
     test_dict = check_test_file()
     input_dict = check_input_file()
@@ -91,7 +93,7 @@ if __name__ == '__main__':
                     csv_writer.writerow([acquirer, assignee, city, country])
                     orbis_incorrect_cnt += 1
                     
-    print('Percentage of input file that is not in Orbis: ' + str(float(orbis_incorrect_cnt) / input_file_size))
+    print('\t Percentage of input file that is not in Orbis: ' + str(float(orbis_incorrect_cnt) / input_file_size))
                 
     test_file_size = length_checker.FileLengthChecker(test_file).get_size()
     
@@ -115,7 +117,7 @@ if __name__ == '__main__':
                     csv_writer.writerow([acquirer, assignee])
                     test_incorrect_cnt += 1
                     
-    print('Percentage of the test file that is not in the input file: ' + str(float(test_incorrect_cnt) / test_file_size))
+    print('\t Percentage of the test file that is not in the input file: ' + str(float(test_incorrect_cnt) / test_file_size))
     
                 
             
