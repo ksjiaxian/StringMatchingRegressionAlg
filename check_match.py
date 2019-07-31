@@ -3,6 +3,8 @@ import csv
 checked_file = 'outputs/patent_matches.tsv'
 orbis = 'inputs/orbis.tsv'
 test_file = 'inputs/acquirer_test_list.tsv'
+output_file_orbis_check = 'outputs/orbis_check.tsv'
+output_file_test_check = 'outputs/test_check.tsv'
 
 def check_orbis():
     orbis_dict = {}
@@ -61,6 +63,8 @@ if __name__ == '__main__':
             city = row['city']
             country = row['country']
             
+            #TODO: implement exactly what will be checked, and how to record it
+            
     #check with the test file
     with open(checked_file, encoding='csv-utf-8') as tsvfile:
         reader = csv.DictReader(tsvfile, delimiter='\t')
@@ -71,4 +75,4 @@ if __name__ == '__main__':
             city = row['city']
             country = row['country']
             
-            
+            #TODO: implement exactly what will be checked, and how to record it
