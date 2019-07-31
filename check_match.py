@@ -42,9 +42,29 @@ def check_test_file():
                 
     return test_dict
 
+def check_input_file():
+    input_dict = {}
+    
+    #returns a dictionary from subsidiary to acquiring company
+    with open(checked_file, encoding='ISO-8859-1') as tsvfile:
+        reader = csv.DictReader(tsvfile, delimiter='\t')
+    
+        for row in reader:
+            acquirer = row['acquirer_name']
+            assignee = row['assignee_name']
+            
+            if acquirer in input_dict:
+                input_dict[acquirer].add(assignee)
+            else:
+                input_dict[acquirer] = set()
+                input_dict[acquirer].add(assignee)
+                
+    return test_dict
+
 if __name__ == '__main__':
     orbis_dict = check_orbis()
     test_dict = check_test_file()
+    input_dict = check_input_file()
     
     input_file_size = length_checker.FileLengthChecker(checked_file).get_size()
     
@@ -70,19 +90,32 @@ if __name__ == '__main__':
                 if not (assignee.lower(), city.lower()) in set_of_subs:
                     csv_writer.writerow([acquirer, assignee, city, country])
                     orbis_incorrect_cnt += 1
+                    
+    print('Percentage of input file that is not in Orbis: ' + str(float(orbis_incorrect_cnt) / input_file_size))
                 
     test_file_size = length_checker.FileLengthChecker(test_file).get_size()
     
-    #TODO: find the percentage of rows in the test file that are/are not in the file being checked
-    
+    test_incorrect_cnt = 0
     #check with the test file
     with open(test_file, encoding='csv-utf-8') as tsvfile:
-        reader = csv.DictReader(tsvfile, delimiter='\t')
-    
-        for row in reader:
-            acquirer = row['acquirer_name']
-            assignee = row['assignee_name']
-            city = row['city']
-            country = row['country']
+        with open(output_file_test_check, 'w', newline="\n", encoding='utf-8-sig') as out_file: 
+            csv_writer = csv.writer(out_file, delimiter=',')
+            header = ['acquirer_name', 'assignee_name']
+            csv_writer.writerow(header)
             
-            #TODO: implement exactly what will be checked, and how to record it
+            reader = csv.DictReader(tsvfile, delimiter='\t')
+        
+            for row in reader:
+                acquirer = row['acquirer_name']
+                assignee = row['assignee_name']
+                
+                set_of_assignees = test_dict[acquirer]
+                
+                if not assignee in set_of_assignees:
+                    csv_writer.writerow([acquirer, assignee])
+                    test_incorrect_cnt += 1
+                    
+    print('Percentage of the test file that is not in the input file: ' + str(float(test_incorrect_cnt) / test_file_size))
+    
+                
+            
