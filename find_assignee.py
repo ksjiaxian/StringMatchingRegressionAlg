@@ -2,7 +2,10 @@ import csv
 from fuzzywuzzy import fuzz
 import math
 from fastnumbers import fast_real
+import create_model
 
+data = 'files/data_frame_shortened.csv'
+model = create_model.Model(data)
 
 assign_dict = {}
 copy_assign_dict = {}
@@ -18,20 +21,20 @@ with open('inputs/acquirer_test_list.tsv', encoding='ISO-8859-1') as tsvfile:
         copy_assign_dict[row_dict['acquirer_uuid']] = [row_dict['acquirer_name'], row_dict['acquirer_uuid']]
 
 remove_str = set()
-#replace words with blanks
+"""#replace words with blanks
 with open('generic_words/chars.csv', encoding='ISO-8859-1') as csvfile:
     reader = csv.reader(csvfile, delimiter=',')
     for row in reader:
         print(row)
-        remove_str.add(row[0])
+        remove_str.add(row[0])"""
 
-replace_str = {}
+"""replace_str = {}
 with open('generic_words/replace_str.csv', encoding='utf-8-sig') as csvfile:
     reader = csv.reader(csvfile, delimiter=',')
     for row in reader:
-        replace_str[row[0]] = row[1]
+        replace_str[row[0]] = row[1]"""
 
-with open('inputs/assignee.tsv', encoding='utf-8-sig') as tsvfile:
+with open('inputs/assignee_locations_master_full.tsv', encoding='ISO-8859-1') as tsvfile:
     reader = csv.DictReader(tsvfile, delimiter='\t')
     list_of_dict = {}
     
@@ -45,9 +48,6 @@ with open('inputs/assignee.tsv', encoding='utf-8-sig') as tsvfile:
         print(row)
         assignee_dict = dict(row)
         assignee_id = row['id']
-        assignee_type = row['assignee_type']
-        name_first = row['name_first']
-        name_last = row['name_last']
         org_og = row['organization']
         org = row['organization']
         #loc_id = row['location_id']
@@ -64,36 +64,36 @@ with open('inputs/assignee.tsv', encoding='utf-8-sig') as tsvfile:
         matched_name = ''
         matched_id = ''
         
-        if name_first != '' and name_last != '':
-            continue
+
         
-        # replace words
+        """# replace words
         for word, rep in replace_str.items():
             org = org.replace(' ' + word + ' ', ' ' + rep + ' ')
         
         # ignore special char
         for ign in remove_str:
-            org = org.replace(ign, '')
+            org = org.replace(ign, '')"""
             
         
         # if there's a 99 percent string match   
         for ac_id, ac_dict in assign_dict.items():
             ac_name = ac_dict['acquirer_name']
             ac_mod = ac_dict['acquirer_name']
-            
+            '''
             # replace words
             for word, rep in replace_str.items():
                 ac_mod = ac_mod.replace(' ' + word + ' ', ' ' + rep + ' ')
             
             # ignore special char
             for ign in remove_str:
-                ac_mod = ac_mod.replace(ign, '')
+                ac_mod = ac_mod.replace(ign, '')'''
           
-            if fuzz.token_set_ratio(ac_mod, org) >= 99:
+            if model.is_match(ac_name, org):
                 if fuzz.token_set_ratio(ac_mod, org) > fuzz.token_set_ratio(matched_name, org):
                     matched_name = ac_mod
                     matched_id = ac_dict['acquirer_uuid']
                     print(matched_id)
+                    
         if matched_id != '':
             print(matched_name)
             match_list = copy_assign_dict[matched_id]
@@ -112,9 +112,9 @@ with open('inputs/assignee.tsv', encoding='utf-8-sig') as tsvfile:
                     
            
             
-with open('outputs/assignee_matched.tsv', 'w', newline="\n", encoding='utf-8') as out_file:
+with open('outputs/patent_matches.tsv', 'w', newline="\n", encoding='utf-8') as out_file:
         writer = csv.writer(out_file, delimiter = '\t')
-        writer.writerow(['acquirer_name', 'acquirer_uuid', 'assignee_id', 'assignee_name']) 
+        writer.writerow(['acquirer_name', 'acquirer_uuid', 'assignee_id', 'assignee_name', 'city', 'state', 'country', 'latitude', 'longitude']) 
         for idx, match_list in copy_assign_dict.items():
             writer.writerow(match_list)                     
                      
