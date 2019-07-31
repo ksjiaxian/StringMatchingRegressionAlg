@@ -43,4 +43,4 @@ for i in range(1000):
             
             
 print('Best Threshold: ' + str(best_threshold))
-print(str(truncate(best_percentage_correct * 100), 3) + '% correct') 
+print(str(truncate(best_percentage_correct * 100, 3)) + '% correct') 
