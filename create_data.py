@@ -3,7 +3,7 @@ from fuzzywuzzy import fuzz
 import random
 
 input_file = 'inputs/acquirer_test_list.tsv'
-output_file = 'files/data_frame_shortened.csv'
+output_file = 'files/data_frame_test.csv'
 
 #keep track of all the aliases and subsidiaries for a given company
 other_names = {}

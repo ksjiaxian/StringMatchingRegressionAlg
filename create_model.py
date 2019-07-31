@@ -124,14 +124,9 @@ class Model:
             
             return self.model.predict_proba(sample)[:,1]
         
-    def is_match(self, string1, string2):
+    def is_match(self, string1, string2, threshold):
         confidence = self.make_prediction(string1, string2)
-        print(confidence)
-        if confidence > .90:
-            return 'no yeah'
-        else:
-            return 'yeah no'
-        #return confidence > .90
+        return confidence > threshold
         
     def test(self, test):
         return self.model.predict_proba(test)[:,1]
