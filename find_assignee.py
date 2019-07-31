@@ -2,8 +2,6 @@ import csv
 from fuzzywuzzy import fuzz
 import math
 from fastnumbers import fast_real
-import formulas
-
 
 
 assign_dict = {}
@@ -116,7 +114,7 @@ with open('inputs/assignee.tsv', encoding='utf-8-sig') as tsvfile:
             
 with open('outputs/assignee_matched.tsv', 'w', newline="\n", encoding='utf-8') as out_file:
         writer = csv.writer(out_file, delimiter = '\t')
-        writer.writerow(['acquirer', 'acquirer_id', 'assignees']) 
+        writer.writerow(['acquirer_name', 'acquirer_uuid', 'assignee_id', 'assignee_name']) 
         for idx, match_list in copy_assign_dict.items():
             writer.writerow(match_list)                     
                      
